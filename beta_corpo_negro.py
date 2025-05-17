@@ -17,9 +17,10 @@ resistividade = np.array([5.64, 8.06, 10.74, 13.54, 16.46, 19.47, 22.58, 25.7,
 ln_T = np.log(temperatura)
 ln_R = np.log(resistividade / resistividade[0])
 
-# Ajuste linear para obter beta
-beta, coef_linear = np.polyfit(ln_T, ln_R, 1)
-beta_err = np.sqrt(np.diag(np.polyfit(ln_T, ln_R, 1, cov=True)))[0]
+# Ajuste linear para obter beta (forma correta de calcular a covariância)
+coef, cov = np.polyfit(ln_T, ln_R, 1, cov=True)
+beta, coef_linear = coef
+beta_err = np.sqrt(cov[0, 0])  # Erro do coeficiente angular (beta)
 
 # Plot
 plt.figure(figsize=(10, 6))
